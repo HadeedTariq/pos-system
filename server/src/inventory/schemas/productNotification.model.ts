@@ -1,6 +1,6 @@
 import { Schema, Document, model } from 'mongoose';
 
-interface IMessage extends Document {
+interface IProdcutNotification extends Document {
   sender: Schema.Types.ObjectId;
   receiver: Schema.Types.ObjectId;
   message: string;
@@ -14,7 +14,7 @@ const productNotficationSchema: Schema = new Schema({
   productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
 });
 
-export const ProductNotfication = model<IMessage>(
+export const ProductNotfication = model<IProdcutNotification>(
   'Message',
   productNotficationSchema,
 );
