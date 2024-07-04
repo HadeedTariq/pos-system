@@ -7,7 +7,7 @@ import { User } from './schemas/user.model';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 
-type UserAuth = { name: string; email: string; _id: string };
+type UserAuth = { name: string; email: string; _id: string; role: string };
 
 @Injectable()
 export class AuthService {
@@ -89,7 +89,12 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(refresh_payload, {
       secret: process.env.JWT_REFRESH_SECRET,
     });
-    const access_payload = { email: user.email, id: user._id, name: user.name };
+    const access_payload = {
+      email: user.email,
+      id: user._id,
+      name: user.name,
+      role: user.role,
+    };
     const accessToken = this.jwtService.sign(access_payload, {
       secret: process.env.JWT_ACCESS_SECRET,
     });

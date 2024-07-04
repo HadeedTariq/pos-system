@@ -35,7 +35,7 @@ export class InventoryController {
         destination: 'src/uploads',
         filename: (req, file, callback) => {
           const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+            Date.now() + '-' + Math.round(Math.random() * 1000000000);
           const ext = extname(file.originalname);
           callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
@@ -70,11 +70,8 @@ export class InventoryController {
 
   @UseGuards(AuthGuard)
   @Delete('deleteProduct')
-  deleteProduct(
-    @Req() req: Request,
-    @Query(ValidationPipe) { productId }: DeleteProductDto,
-  ) {
-    return this.inventoryService.deleteProduct(productId, req);
+  deleteProduct(@Query(ValidationPipe) { productId }: DeleteProductDto) {
+    return this.inventoryService.deleteProduct(productId);
   }
 
   // TODO: on frontend we will firstly get all the product details then the user can edit the product
@@ -86,7 +83,7 @@ export class InventoryController {
         destination: 'src/uploads',
         filename: (req, file, callback) => {
           const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+            Date.now() + '-' + Math.round(Math.random() * 1000000000);
           const ext = extname(file.originalname);
           callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
