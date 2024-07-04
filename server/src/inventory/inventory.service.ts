@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { v2 } from 'cloudinary';
-import { CreateProductDto, EditProductDto } from './dto/inventory.dto';
+import {
+  CreateProductDto,
+  DeleteProductDto,
+  EditProductDto,
+} from './dto/inventory.dto';
 import { Product } from './schemas/products.model';
 import { Request } from 'express';
 import { CustomException } from 'src/custom.exception';
@@ -73,11 +77,9 @@ export class InventoryService {
     return { message: 'Product created successfully' };
   }
 
-  async deleteProduct(id: string, req: Request) {
-    const user: any = req.user;
+  async deleteProduct(id: string) {
     const product = await Product.findOneAndDelete({
       _id: id,
-      creator: user.id,
     });
 
     if (!product) {

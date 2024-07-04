@@ -74,7 +74,7 @@ export class InventoryController {
     @Req() req: Request,
     @Query(ValidationPipe) { productId }: DeleteProductDto,
   ) {
-    return this.inventoryService.deleteProduct(productId, req);
+    return this.inventoryService.deleteProduct(productId);
   }
 
   // TODO: on frontend we will firstly get all the product details then the user can edit the product
