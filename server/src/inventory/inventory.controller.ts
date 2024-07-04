@@ -14,19 +14,23 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { InventoryService } from './inventory.service';
 import {
   CreateProductDto,
   DeleteProductDto,
   EditProductDto,
-} from './dto/inventory.dto';
+} from 'src/inventory/dto/inventory.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { CustomException } from 'src/custom.exception';
+import { InventoryService } from './inventory.service';
+import { ProductService } from './services/product/product.service';
 
 @Controller('inventory')
 export class InventoryController {
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    private readonly inventoryService: InventoryService,
+    private readonly productService: ProductService,
+  ) {}
   @UseGuards(AuthGuard)
   @Post('createProduct')
   @UseInterceptors(
@@ -51,12 +55,10 @@ export class InventoryController {
       throw new CustomException('Product main image required', 404);
     }
 
-    const result: any = await this.inventoryService.uploadProductImage(
-      file.path,
-    );
-    this.inventoryService.deletFileLocally(file.path);
+    const result: any = await this.productService.uploadProductImage(file.path);
+    this.productService.deletFileLocally(file.path);
 
-    return this.inventoryService.createProduct(
+    return this.productService.createProduct(
       {
         ...product,
         image: result.secure_url,
@@ -74,7 +76,7 @@ export class InventoryController {
     @Req() req: Request,
     @Query(ValidationPipe) { productId }: DeleteProductDto,
   ) {
-    return this.inventoryService.deleteProduct(productId);
+    return this.productService.deleteProduct(productId, req);
   }
 
   // TODO: on frontend we will firstly get all the product details then the user can edit the product
@@ -109,7 +111,7 @@ export class InventoryController {
       throw new CustomException('Product main image required', 404);
     }
 
-    return this.inventoryService.editProduct(
+    return this.productService.editProduct(
       {
         ...editedProduct,
         extraImages: JSON.parse(editedProduct.extraImages),
