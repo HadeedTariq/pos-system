@@ -75,3 +75,10 @@ export class DeleiverProductDto {
   @Length(24, 24)
   orderId: string;
 }
+
+export class CancelOrderDto {
+  @IsNotEmpty()
+  @IsString()
+  @Length(24, 24)
+  orderId: string;
+}

@@ -64,4 +64,29 @@ export class OrderService {
 
     return { message: 'Order deleivered successfully' };
   }
+
+  async cancelOrder(req: Request, orderId: string) {
+    const user: any = req.user;
+
+    const updateOrder = await Order.findByIdAndUpdate(orderId, {
+      status: 'cancel',
+    });
+
+    if (!updateOrder) {
+      throw new CustomException('Order not found', 404);
+    }
+
+    await Product.findByIdAndUpdate(updateOrder.productId, {
+      $inc: { stock: updateOrder.productQuantity },
+    });
+
+    await ProductNotification.create({
+      sender: user.id,
+      receiver: updateOrder.requester_id,
+      message: `Your order canceled`,
+      productId: updateOrder.productId,
+    });
+
+    return { message: 'Order canceled successfully' };
+  }
 }

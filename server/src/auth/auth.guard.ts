@@ -28,7 +28,8 @@ export class AuthGuard implements CanActivate {
     const secureUrl =
       request.originalUrl === '/inventory/createProduct' ||
       request.originalUrl === '/inventory/editProduct' ||
-      request.originalUrl === '/inventory/deleiverProduct'
+      request.originalUrl === '/inventory/seller/deleiverProduct' ||
+      request.originalUrl === '/inventory/seller/cancelOrder'
         ? true
         : false;
 

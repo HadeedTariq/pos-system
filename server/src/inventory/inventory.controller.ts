@@ -15,6 +15,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import {
+  CancelOrderDto,
   CreateProductDto,
   DeleiverProductDto,
   DeleteProductDto,
@@ -137,11 +138,20 @@ export class InventoryController {
   }
 
   @UseGuards(AuthGuard)
-  @Put('deleiverProduct')
+  @Put('seller/deleiverProduct')
   deleiverProduct(
     @Body(ValidationPipe) { orderId }: DeleiverProductDto,
     @Req() req: Request,
   ) {
     return this.orderService.deleiverProduct(req, orderId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('seller/cancelOrder')
+  cancelOrder(
+    @Body(ValidationPipe) { orderId }: CancelOrderDto,
+    @Req() req: Request,
+  ) {
+    return this.orderService.cancelOrder(req, orderId);
   }
 }
