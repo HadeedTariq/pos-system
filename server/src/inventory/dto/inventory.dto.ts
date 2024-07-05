@@ -57,3 +57,21 @@ export class EditProductDto extends CreateProductDto {
   @IsBoolean()
   outOfStock: boolean;
 }
+
+export class OrderProductDto {
+  @IsNotEmpty()
+  @IsString()
+  @Length(24, 24)
+  productId: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  productQuantity: number;
+}
+
+export class DeleiverProductDto {
+  @IsNotEmpty()
+  @IsString()
+  @Length(24, 24)
+  orderId: string;
+}

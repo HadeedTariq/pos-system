@@ -25,6 +25,17 @@ export class AuthGuard implements CanActivate {
       throw new CustomException('Invalid Token ', 404);
     }
 
+    const secureUrl =
+      request.originalUrl === '/inventory/createProduct' ||
+      request.originalUrl === '/inventory/editProduct' ||
+      request.originalUrl === '/inventory/deleiverProduct'
+        ? true
+        : false;
+
+    if (secureUrl && user.role !== 'Seller') {
+      throw new CustomException('You are not authorized for this task', 404);
+    }
+
     request.user = user;
     return true;
   }

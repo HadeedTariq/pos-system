@@ -12,7 +12,7 @@ const orderSchema: Schema = new Schema({
   requester_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   status: {
     type: String,
-    enum: ['pending', 'delivered', 'cancel'],
+    enum: ['pending', 'reached', 'delivered', 'cancel'],
     default: 'pending',
   },
   productQuantity: { type: Number, required: true },

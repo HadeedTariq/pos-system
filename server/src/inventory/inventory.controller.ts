@@ -16,20 +16,24 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import {
   CreateProductDto,
+  DeleiverProductDto,
   DeleteProductDto,
   EditProductDto,
+  OrderProductDto,
 } from 'src/inventory/dto/inventory.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { CustomException } from 'src/custom.exception';
 import { InventoryService } from './inventory.service';
 import { ProductService } from './services/product/product.service';
+import { OrderService } from './services/order/order.service';
 
 @Controller('inventory')
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
     private readonly productService: ProductService,
+    private readonly orderService: OrderService,
   ) {}
   @UseGuards(AuthGuard)
   @Post('createProduct')
@@ -121,5 +125,23 @@ export class InventoryController {
       file.path,
       req,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('orderProduct')
+  orderProduct(
+    @Body(ValidationPipe) order: OrderProductDto,
+    @Req() req: Request,
+  ) {
+    return this.orderService.orderProduct(order, req);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('deleiverProduct')
+  deleiverProduct(
+    @Body(ValidationPipe) { orderId }: DeleiverProductDto,
+    @Req() req: Request,
+  ) {
+    return this.orderService.deleiverProduct(req, orderId);
   }
 }

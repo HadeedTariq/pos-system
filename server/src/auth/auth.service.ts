@@ -40,26 +40,22 @@ export class AuthService {
   }
 
   async registerUser(registerUserDto: RegisterUserDto) {
-    try {
-      const { email, otp } = registerUserDto;
-      const isCorrectOtp = await Otp.findOne({
-        email,
-        otp,
-      });
+    const { email, otp } = registerUserDto;
+    const isCorrectOtp = await Otp.findOne({
+      email,
+      otp,
+    });
 
-      if (!isCorrectOtp) {
-        throw new CustomException('Incorrect Otp', 404);
-      }
+    if (!isCorrectOtp) {
+      throw new CustomException('Incorrect Otp', 404);
+    }
 
-      const createUser = await User.create(registerUserDto);
+    const createUser = await User.create(registerUserDto);
 
-      if (createUser) {
-        throw new CustomException('User created successfully', 201);
-      } else {
-        throw new CustomException('Something went wrong', 404);
-      }
-    } catch (err) {
-      throw new CustomException('Something went wrong', 501);
+    if (createUser) {
+      throw new CustomException('User created successfully', 201);
+    } else {
+      throw new CustomException('Something went wrong', 404);
     }
   }
 
@@ -176,5 +172,20 @@ export class AuthService {
       'User logged in through refresh token successfully',
       200,
     );
+  }
+
+  logOutUser(res: Response) {
+    return res
+      .clearCookie('accessToken', {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      })
+      .clearCookie('refreshToken', {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      })
+      .json({ message: 'User logged out' });
   }
 }
