@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Post,
   Put,
   Query,
@@ -28,6 +29,7 @@ import { CustomException } from 'src/custom.exception';
 import { InventoryService } from './inventory.service';
 import { ProductService } from './services/product/product.service';
 import { OrderService } from './services/order/order.service';
+import { SellerService } from './services/seller/seller.service';
 
 @Controller('inventory')
 export class InventoryController {
@@ -35,6 +37,7 @@ export class InventoryController {
     private readonly inventoryService: InventoryService,
     private readonly productService: ProductService,
     private readonly orderService: OrderService,
+    private readonly sellerService: SellerService,
   ) {}
   @UseGuards(AuthGuard)
   @Post('createProduct')
@@ -148,10 +151,25 @@ export class InventoryController {
 
   @UseGuards(AuthGuard)
   @Put('seller/cancelOrder')
-  cancelOrder(
+  cancelOrderBySeller(
     @Body(ValidationPipe) { orderId }: CancelOrderDto,
     @Req() req: Request,
   ) {
-    return this.orderService.cancelOrder(req, orderId);
+    return this.orderService.cancelOrderBySeller(req, orderId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('user/cancelOrder')
+  cancelOrderByUser(
+    @Body(ValidationPipe) { orderId }: CancelOrderDto,
+    @Req() req: Request,
+  ) {
+    return this.orderService.cancelOrderByUser(req, orderId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('seller/sales')
+  getSellerSales(@Req() req: Request) {
+    return this.sellerService.getSellerSales(req);
   }
 }

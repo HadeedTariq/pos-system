@@ -65,7 +65,7 @@ export class OrderService {
     return { message: 'Order deleivered successfully' };
   }
 
-  async cancelOrder(req: Request, orderId: string) {
+  async cancelOrderBySeller(req: Request, orderId: string) {
     const user: any = req.user;
 
     const updateOrder = await Order.findByIdAndUpdate(orderId, {
@@ -76,6 +76,10 @@ export class OrderService {
       throw new CustomException('Order not found', 404);
     }
 
+    if (updateOrder.status === 'cancel') {
+      throw new CustomException('Order already canceled', 200);
+    }
+
     await Product.findByIdAndUpdate(updateOrder.productId, {
       $inc: { stock: updateOrder.productQuantity },
     });
@@ -84,6 +88,34 @@ export class OrderService {
       sender: user.id,
       receiver: updateOrder.requester_id,
       message: `Your order canceled`,
+      productId: updateOrder.productId,
+    });
+
+    return { message: 'Order canceled successfully' };
+  }
+
+  async cancelOrderByUser(req: Request, orderId: string) {
+    const user: any = req.user;
+
+    const updateOrder = await Order.findByIdAndUpdate(orderId, {
+      status: 'cancel',
+    });
+
+    if (!updateOrder) {
+      throw new CustomException('Order not found', 404);
+    }
+
+    if (updateOrder.status === 'cancel') {
+      throw new CustomException('Order already canceled', 200);
+    }
+    const product = await Product.findByIdAndUpdate(updateOrder.productId, {
+      $inc: { stock: updateOrder.productQuantity },
+    });
+
+    await ProductNotification.create({
+      sender: user.id,
+      receiver: product.creator,
+      message: `User cancel the order of ${product.name}`,
       productId: updateOrder.productId,
     });
 
