@@ -30,7 +30,9 @@ export class AuthGuard implements CanActivate {
       request.originalUrl === '/inventory/editProduct' ||
       request.originalUrl === '/inventory/seller/deleiverProduct' ||
       request.originalUrl === '/inventory/seller/cancelOrder' ||
-      request.originalUrl === '/seller/sales'
+      request.originalUrl === '/seller/sales' ||
+      request.originalUrl === '/seller/products' ||
+      request.originalUrl === '/seller/pendingOrders'
         ? true
         : false;
 

@@ -172,4 +172,14 @@ export class InventoryController {
   getSellerSales(@Req() req: Request) {
     return this.sellerService.getSellerSales(req);
   }
+  @UseGuards(AuthGuard)
+  @Get('seller/products')
+  getSellerProducts(@Req() req: Request) {
+    return this.sellerService.getSellerProducts(req);
+  }
+  @UseGuards(AuthGuard)
+  @Get('seller/pendingOrders')
+  getSellerPendingOrders(@Req() req: Request) {
+    return this.sellerService.getSellerPendingOrders(req);
+  }
 }

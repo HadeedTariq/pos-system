@@ -28,7 +28,7 @@ export class SellerService {
             },
             {
               $group: {
-                _id: '$productQuantity',
+                _id: '$productId',
                 totalSaledStock: { $sum: '$productQuantity' },
               },
             },
@@ -41,6 +41,7 @@ export class SellerService {
       {
         $project: {
           productSales: 1,
+          name: 1,
           price: 1,
           totalSale: {
             $multiply: ['$productSales.totalSaledStock', '$price'],
@@ -50,5 +51,52 @@ export class SellerService {
     ]);
 
     return sellerSales;
+  }
+
+  async getSellerProducts(req: Request) {
+    const user: any = req.user;
+    const sellerProducts = await Product.aggregate([
+      {
+        $match: {
+          creator: new mongoose.Types.ObjectId(user.id),
+        },
+      },
+    ]);
+
+    return sellerProducts;
+  }
+
+  async getSellerPendingOrders(req: Request) {
+    const user: any = req.user;
+    let sellerPendingOrders = await Product.aggregate([
+      {
+        $match: {
+          creator: new mongoose.Types.ObjectId(user.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'orders',
+          foreignField: 'productId',
+          localField: '_id',
+          as: 'pendingOrders',
+          pipeline: [
+            {
+              $match: {
+                status: 'pending',
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          pendingOrders: 1,
+          name: 1,
+        },
+      },
+    ]);
+
+    return sellerPendingOrders;
   }
 }
