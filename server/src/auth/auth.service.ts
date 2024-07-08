@@ -46,7 +46,6 @@ export class AuthService {
         email,
         otp,
       });
-
       if (!isCorrectOtp) {
         throw new CustomException('Incorrect Otp', 404);
       }
