@@ -45,4 +45,11 @@ export class AuthController {
   getUserByRefreshToken(@Req() req: Request, @Res() res: Response) {
     return this.authService.getUserByRefreshToken(req, res);
   }
+
+  @Post('logout')
+  logoutUser(@Res() res: Response) {
+    console.log('request comes in');
+
+    return this.authService.logOutUser(res);
+  }
 }

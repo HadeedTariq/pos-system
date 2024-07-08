@@ -7,7 +7,7 @@ import { User } from './schemas/user.model';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 
-type UserAuth = { name: string; email: string; _id: string };
+type UserAuth = { name: string; email: string; _id: string; role: string };
 
 @Injectable()
 export class AuthService {
@@ -46,19 +46,17 @@ export class AuthService {
         email,
         otp,
       });
+
       if (!isCorrectOtp) {
         throw new CustomException('Incorrect Otp', 404);
       }
 
-      const createUser = await User.create(registerUserDto);
+    const createUser = await User.create(registerUserDto);
 
-      if (createUser) {
-        throw new CustomException('User created successfully', 201);
-      } else {
-        throw new CustomException('Something went wrong', 404);
-      }
-    } catch (err) {
-      throw new CustomException('Something went wrong', 501);
+    if (createUser) {
+      throw new CustomException('User created successfully', 201);
+    } else {
+      throw new CustomException('Something went wrong', 404);
     }
   }
 
@@ -88,7 +86,12 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(refresh_payload, {
       secret: process.env.JWT_REFRESH_SECRET,
     });
-    const access_payload = { email: user.email, id: user._id, name: user.name };
+    const access_payload = {
+      email: user.email,
+      id: user._id,
+      name: user.name,
+      role: user.role,
+    };
     const accessToken = this.jwtService.sign(access_payload, {
       secret: process.env.JWT_ACCESS_SECRET,
     });
@@ -170,5 +173,20 @@ export class AuthService {
       'User logged in through refresh token successfully',
       200,
     );
+  }
+
+  logOutUser(res: Response) {
+    return res
+      .clearCookie('accessToken', {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      })
+      .clearCookie('refreshToken', {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      })
+      .json({ message: 'User logged out' });
   }
 }

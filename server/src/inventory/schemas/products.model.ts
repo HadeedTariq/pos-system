@@ -31,7 +31,7 @@ const productSchema: Schema = new Schema(
     stock: { type: Number, required: true },
     category: { type: String, required: true },
     used: { type: Boolean, required: true },
-    outOfStock: { type: Boolean, required: true },
+    outOfStock: { type: Boolean, default: false },
     purchasers: { type: [Schema.Types.ObjectId], ref: 'User' },
   },
   { timestamps: true },
