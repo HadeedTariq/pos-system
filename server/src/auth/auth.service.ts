@@ -51,11 +51,10 @@ export class AuthService {
         throw new CustomException('Incorrect Otp', 404);
       }
 
-    const createUser = await User.create(registerUserDto);
+      const createUser = await User.create(registerUserDto);
 
-    if (createUser) {
-      throw new CustomException('User created successfully', 201);
-    } else {
+      return { message: 'User created successfully' };
+    } catch (err) {
       throw new CustomException('Something went wrong', 404);
     }
   }
