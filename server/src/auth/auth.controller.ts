@@ -48,8 +48,6 @@ export class AuthController {
 
   @Post('logout')
   logoutUser(@Res() res: Response) {
-    console.log('request comes in');
-
     return this.authService.logOutUser(res);
   }
 }

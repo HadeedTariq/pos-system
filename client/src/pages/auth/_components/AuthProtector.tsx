@@ -1,23 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { authApi } from "../../../utils/axios";
-import { setUser } from "../reducer/authReducer";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useGetUserDetailsQuery } from "@/services/apiServices";
+import Loading from "@/components/Loading";
+import { useEffect } from "react";
+import { ArrowBigLeft } from "lucide-react";
+import { setCurrentUser } from "@/reducers/fullAppReducer";
 
 const AuthProtector = () => {
   const dispatch = useDispatch();
-  const { data: user } = useQuery({
-    queryKey: ["getUserInfo"],
-    queryFn: async () => {
-      const { data } = await authApi.get("/");
-      dispatch(setUser(data));
-      return data;
-    },
-  });
+  const navigate = useNavigate();
+  const { data: user, isLoading } = useGetUserDetailsQuery({});
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setCurrentUser(user));
+    }
+  }, [user]);
+  if (isLoading) return <Loading />;
   if (user) return <Navigate to={"/"} />;
   return (
-    <div className="flex items-center justify-center h-[100vh]">
-      <Outlet />
+    <div className="h-[100vh]">
+      <ArrowBigLeft
+        cursor={"pointer"}
+        size={30}
+        onClick={() => navigate("/")}
+      />
+      <div className="flex items-center justify-center h-[95%]">
+        <Outlet />
+      </div>
     </div>
   );
 };

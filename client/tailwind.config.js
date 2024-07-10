@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -71,7 +71,19 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+        openSans: ["Open Sans", "sans-serif"],
+        lato: ["Lato", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
+        oswald: ["Oswald", "sans-serif"],
+        raleway: ["Raleway", "sans-serif"],
+        merriweather: ["Merriweather", "serif"],
+        nunito: ["Nunito", "sans-serif"],
+        ptSans: ["PT Sans", "sans-serif"],
+        playfairDisplay: ["Playfair Display", "serif"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

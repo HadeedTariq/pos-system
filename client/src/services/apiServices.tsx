@@ -4,10 +4,12 @@ import {
   LoginSchema,
   RegisterSchema,
 } from "@/pages/auth/validators/user.validator";
+import { CreateProductSchema } from "@/pages/app/validators/product.validator";
 
 export const posApi = createApi({
   reducerPath: "posApi",
   baseQuery: fetchBaseQuery({ baseUrl: url, credentials: "include" }),
+  tagTypes: ["Product"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user: RegisterSchema) => ({
@@ -30,6 +32,23 @@ export const posApi = createApi({
         body: user,
       }),
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+    }),
+    getUserDetails: builder.query({
+      query: () => "/auth/",
+    }),
+    createProduct: builder.mutation({
+      query: (product: CreateProductSchema) => ({
+        url: "/inventory/createProduct",
+        body: product,
+        method: "POST",
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -37,4 +56,6 @@ export const {
   useSendOtpMutation,
   useLoginUserMutation,
   useRegisterUserMutation,
+  useGetUserDetailsQuery,
+  useCreateProductMutation,
 } = posApi;

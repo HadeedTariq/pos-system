@@ -22,11 +22,8 @@ const otpSchema = new Schema(
 );
 
 const sendMail = async (email: string, otp: string) => {
-  const mailResponse = await mailSender(
-    email,
-    otp
-  );
-  console.log('Email sent successfully: ', mailResponse);
+  const mailResponse = await mailSender(email, otp);
+  console.log('Email sent successfully');
 };
 
 otpSchema.pre('save', async function (next) {
