@@ -45,15 +45,8 @@ const CreateProduct = () => {
   const [extraImages, setExtraImages] = useState<string[]>([]);
   const [createProduct, { isLoading }] = useCreateProductMutation();
 
-  const createExtraImages = (index: number, image: string) => {
+  const createExtraImages = (_: number, image: string) => {
     if (image === "") return;
-    const isImageAlreadyExist = extraImages.find((img) => img === image);
-    if (isImageAlreadyExist) {
-      toast({
-        title: "Image Already exist",
-      });
-      return;
-    }
 
     setExtraImages((prev) => [...prev, image]);
   };
@@ -215,7 +208,17 @@ const CreateProduct = () => {
                 <Input
                   placeholder="extraImages"
                   type="url"
+                  value={extraImages[0] ? extraImages[0] : ""}
                   onChange={(e) => {
+                    const isImageAlreadyExist = extraImages.find(
+                      (img) => img === e.target.value
+                    );
+                    if (isImageAlreadyExist) {
+                      toast({
+                        title: "Image Already exist",
+                      });
+                      return;
+                    }
                     createExtraImages(0, e.target.value);
                   }}
                   readOnly={extraImages.length === 3}
@@ -225,7 +228,17 @@ const CreateProduct = () => {
                 <Input
                   placeholder="extraImages"
                   type="url"
+                  value={extraImages[1] ? extraImages[1] : ""}
                   onChange={(e) => {
+                    const isImageAlreadyExist = extraImages.find(
+                      (img) => img === e.target.value
+                    );
+                    if (isImageAlreadyExist) {
+                      toast({
+                        title: "Image Already exist",
+                      });
+                      return;
+                    }
                     createExtraImages(1, e.target.value);
                   }}
                   readOnly={extraImages.length === 3}
@@ -235,7 +248,17 @@ const CreateProduct = () => {
                 <Input
                   placeholder="extraImages"
                   type="url"
+                  value={extraImages[2] ? extraImages[2] : ""}
                   onChange={(e) => {
+                    const isImageAlreadyExist = extraImages.find(
+                      (img) => img === e.target.value
+                    );
+                    if (isImageAlreadyExist) {
+                      toast({
+                        title: "Image Already exist",
+                      });
+                      return;
+                    }
                     createExtraImages(2, e.target.value);
                   }}
                   readOnly={extraImages.length === 3}

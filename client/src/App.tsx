@@ -9,6 +9,9 @@ import { useEffect } from "react";
 import { useTheme } from "./pages/app/hooks/useTheme";
 import SellerProtector from "./pages/app/_components/SellerProtector";
 import CreateProduct from "./pages/app/routes/CreateProduct";
+import SellerDashboard from "./pages/app/routes/SellerDashboard";
+import SellerSidebar from "./pages/app/_components/SellerSidebar";
+import SellerProducts from "./pages/app/routes/SellerProducts";
 
 function App() {
   const { theme } = useTheme();
@@ -42,6 +45,10 @@ function App() {
         <Route index element={<Home />} />
         <Route path="seller" element={<SellerProtector />}>
           <Route path="createProduct" element={<CreateProduct />} />
+          <Route path="dashboard" element={<SellerSidebar />}>
+            <Route index element={<SellerDashboard />} />
+            <Route path="products" element={<SellerProducts />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

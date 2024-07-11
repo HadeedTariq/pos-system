@@ -9,7 +9,7 @@ import { CreateProductSchema } from "@/pages/app/validators/product.validator";
 export const posApi = createApi({
   reducerPath: "posApi",
   baseQuery: fetchBaseQuery({ baseUrl: url, credentials: "include" }),
-  tagTypes: ["Product"],
+  tagTypes: ["ProductMutate"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user: RegisterSchema) => ({
@@ -47,7 +47,11 @@ export const posApi = createApi({
         body: product,
         method: "POST",
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["ProductMutate"],
+    }),
+    getSellerProducts: builder.query({
+      query: () => "/inventory/seller/products",
+      providesTags: ["ProductMutate"],
     }),
   }),
 });
@@ -58,4 +62,5 @@ export const {
   useRegisterUserMutation,
   useGetUserDetailsQuery,
   useCreateProductMutation,
+  useGetSellerProductsQuery,
 } = posApi;

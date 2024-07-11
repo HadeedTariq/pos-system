@@ -19,6 +19,9 @@ module.exports = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        "gradient-from": "#4158D0",
+        "gradient-via": "#C850C0",
+        "gradient-to": "#FFCC70",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -52,6 +55,16 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      backgroundImage: {
+        "card-gradient":
+          "linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)",
+        "card-hover-gradient":
+          "linear-gradient(transparent, rgba(0, 0, 0, 0.1))",
+      },
+      transitionTimingFunction: {
+        custom: "cubic-bezier(0.23, 1, 0.320, 1)",
+      },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

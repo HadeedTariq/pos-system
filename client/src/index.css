@@ -8,6 +8,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
+.card {
+  @apply w-72 h-48 bg-card-gradient rounded-lg text-white overflow-hidden relative transform-style-3d perspective-1000 transition-all duration-500 cursor-pointer;
+}
+
+.card-content {
+  @apply p-5 relative z-10 flex flex-col gap-2.5 items-center justify-center text-center h-full;
+}
+
+.card-title {
+  @apply text-2xl font-bold uppercase;
+}
+
+.card-para {
+  @apply opacity-80 text-sm;
+}
+
+.card:hover {
+  @apply transform-rotate-y-10 transform-rotate-x-10 transform-scale-105 shadow-lg;
+}
+
+.card:before {
+  @apply content-[''] absolute top-0 left-0 w-full h-full bg-card-hover-gradient transition-transform duration-500 z-0;
+}
+
+.card:hover:before {
+  @apply -translate-x-full;
+}
+
+.card:after {
+  @apply content-[''] absolute top-0 right-0 w-full h-full bg-card-hover-gradient transition-transform duration-500 z-0;
+}
+
+.card:hover:after {
+  @apply translate-x-full;
+}
 
 @tailwind base;
 @tailwind components;

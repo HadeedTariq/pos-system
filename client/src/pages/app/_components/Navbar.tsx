@@ -51,6 +51,13 @@ const Navbar = () => {
                 Create Product
               </Button>
             )}
+            {currentUser?.role === "Seller" && (
+              <Button
+                onClick={() => navigate("/seller/dashboard")}
+                variant={"neutral"}>
+                Dashboard
+              </Button>
+            )}
             <ThemeHandler />
           </div>
         </div>
