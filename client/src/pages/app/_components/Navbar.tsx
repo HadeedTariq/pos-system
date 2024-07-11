@@ -2,10 +2,22 @@ import ThemeHandler from "@/components/ThemeHandler";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useApp } from "../hooks/useApp";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { useGetUserDetailsQuery } from "@/services/apiServices";
+import { setCurrentUser } from "@/reducers/fullAppReducer";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const { currentUser } = useApp();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { data: user } = useGetUserDetailsQuery({});
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setCurrentUser(user));
+    }
+  }, [user]);
   return (
     <div className="flex flex-col">
       <nav className="bg-white shadow-lg p-2 px-4 dark:bg-slate-800">

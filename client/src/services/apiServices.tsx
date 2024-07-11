@@ -42,7 +42,7 @@ export const posApi = createApi({
       query: () => "/auth/",
     }),
     createProduct: builder.mutation({
-      query: (product: CreateProductSchema) => ({
+      query: (product: FormData) => ({
         url: "/inventory/createProduct",
         body: product,
         method: "POST",

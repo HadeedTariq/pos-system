@@ -26,7 +26,7 @@ import { toast } from "@/components/ui/use-toast";
 
 export function LoginForm() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginValidator),
@@ -41,6 +41,7 @@ export function LoginForm() {
     toast({
       title: data.message,
     });
+    navigate("/");
   };
 
   return (

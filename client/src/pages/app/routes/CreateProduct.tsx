@@ -25,15 +25,63 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
+import { useCreateProductMutation } from "@/services/apiServices";
 
 const CreateProduct = () => {
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(productValidator),
+    values: {
+      category: "",
+      details: "",
+      name: "",
+      price: 0,
+      stock: 0,
+      used: "",
+    },
   });
 
   const [image, setImage] = useState<string | File>("");
+  const [extraImages, setExtraImages] = useState<string[]>([]);
+  const [createProduct, { isLoading }] = useCreateProductMutation();
 
-  const onSubmit = (product: CreateProductSchema) => {};
+  const createExtraImages = (index: number, image: string) => {
+    if (image === "") return;
+    const isImageAlreadyExist = extraImages.find((img) => img === image);
+    if (isImageAlreadyExist) {
+      toast({
+        title: "Image Already exist",
+      });
+      return;
+    }
+
+    setExtraImages((prev) => [...prev, image]);
+  };
+
+  const onSubmit = async (product: CreateProductSchema) => {
+    if (!image) {
+      toast({
+        title: "Product image rerquired",
+        variant: "destructive",
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", image);
+    const productData = { ...product };
+    const productKeys = Object.keys(
+      productData
+    ) as (keyof CreateProductSchema)[];
+    productKeys.forEach((key) => {
+      formData.append(key, productData[key] as string);
+    });
+    formData.append("extraImages", JSON.stringify(extraImages));
+    try {
+      await createProduct(formData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-2">
@@ -104,11 +152,7 @@ const CreateProduct = () => {
               <FormItem className="w-full">
                 <FormLabel>Category</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="productCategory"
-                    type="number"
-                    {...field}
-                  />
+                  <Input placeholder="productCategory" type="text" {...field} />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -123,17 +167,19 @@ const CreateProduct = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Product Type</FormLabel>
-                <FormControl>
-                  <Select>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value || ""}>
+                  <FormControl>
                     <SelectTrigger className="w-full mr-2">
                       <SelectValue placeholder="Product Type" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new">New</SelectItem>
-                      <SelectItem value="used">Used</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="false">New</SelectItem>
+                    <SelectItem value="true">Used</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormDescription />
                 <FormMessage />
               </FormItem>
@@ -145,7 +191,14 @@ const CreateProduct = () => {
               <FormItem className="w-full">
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <Input placeholder="productImage" type="file" />
+                  <Input
+                    onChange={(e) => {
+                      if (!e.target.files) return;
+                      setImage(e.target.files[0]);
+                    }}
+                    placeholder="productImage"
+                    type="file"
+                  />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -153,6 +206,50 @@ const CreateProduct = () => {
             )}
           />
         </div>
+        <FormField
+          name="extraImages"
+          render={() => (
+            <FormItem className="w-full">
+              <FormLabel>Extra Images</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="extraImages"
+                  type="url"
+                  onChange={(e) => {
+                    createExtraImages(0, e.target.value);
+                  }}
+                  readOnly={extraImages.length === 3}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  placeholder="extraImages"
+                  type="url"
+                  onChange={(e) => {
+                    createExtraImages(1, e.target.value);
+                  }}
+                  readOnly={extraImages.length === 3}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  placeholder="extraImages"
+                  type="url"
+                  onChange={(e) => {
+                    createExtraImages(2, e.target.value);
+                  }}
+                  readOnly={extraImages.length === 3}
+                />
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button variant={"gradient"} type="submit" disabled={isLoading}>
+          Create Product
+        </Button>
       </form>
     </Form>
   );

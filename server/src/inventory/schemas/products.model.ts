@@ -23,10 +23,6 @@ const productSchema: Schema = new Schema(
     details: { type: String, required: true },
     extraImages: {
       type: [String],
-      validate: [
-        (val: string[]) => val.length === 3,
-        '{PATH} must have exactly 3 images',
-      ],
     },
     stock: { type: Number, required: true },
     category: { type: String, required: true },

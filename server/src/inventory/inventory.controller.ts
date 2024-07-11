@@ -70,7 +70,6 @@ export class InventoryController {
       {
         ...product,
         image: result.secure_url,
-        extraImages: JSON.parse(product.extraImages),
         price: +product.price,
         stock: +product.stock,
       },

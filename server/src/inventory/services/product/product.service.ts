@@ -62,10 +62,14 @@ export class ProductService {
   }
 
   async createProduct(
-    product: CreateProductDto & { image: string },
+    product: CreateProductDto & {
+      image: string;
+    },
     req: Request,
   ) {
     const user: any = req.user;
+
+    console.log(product.extraImages);
 
     const createdProduct = await Product.create({
       ...product,
