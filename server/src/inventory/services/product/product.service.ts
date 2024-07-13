@@ -69,8 +69,6 @@ export class ProductService {
   ) {
     const user: any = req.user;
 
-    console.log(product.extraImages);
-
     const createdProduct = await Product.create({
       ...product,
       used: String(product.used) === 'true' ? true : false,
@@ -96,11 +94,7 @@ export class ProductService {
     return { message: 'Product Deleted successfully' };
   }
 
-  async editProduct(
-    editedProduct: EditProductDto,
-    filePath: string,
-    req: Request,
-  ) {
+  async editProduct(editedProduct: EditProductDto, req: Request) {
     const user: any = req.user;
     const product = await Product.findOne({
       _id: editedProduct.productId,
@@ -111,14 +105,10 @@ export class ProductService {
       throw new CustomException('Product not found', 404);
     }
 
-    const result: any = await this.uploadProductImage(filePath);
-    this.deletFileLocally(filePath);
-    await this.deletFileFromCloudinary(product.image);
-
     await Product.findByIdAndUpdate(product._id, {
       ...editedProduct,
       used: String(product.used) === 'true' ? true : false,
-      image: result.secure_url,
+      extraImages: JSON.stringify(product.extraImages),
     });
 
     return { message: 'Product Updated successfully' };

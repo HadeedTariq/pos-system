@@ -19,16 +19,16 @@ const Navbar = () => {
     }
   }, [user]);
   return (
-    <div className="flex flex-col">
-      <nav className="bg-white shadow-lg p-2 px-4 dark:bg-slate-800">
-        <div className="flex justify-between items-center">
-          <div className="flex space-x-7">
-            <span
-              className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text font-roboto cursor-pointer font-semibold"
-              onClick={() => navigate("/")}>
-              QuickSell
-            </span>
-          </div>
+    <div className="flex flex-col  w-full">
+      <nav className="bg-white shadow-lg relative h-[60px] max-[460px]:h-[95px] w-full   dark:bg-slate-800">
+        <div
+          className="flex justify-between z-40
+          fixed max-[460px]:flex-col w-full p-2 bg-white dark:bg-slate-800 h-[60px] items-center max-[460px]:h-[95px] gap-2">
+          <span
+            className="text-3xl z-50 bg-gradient-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text font-roboto cursor-pointer font-semibold"
+            onClick={() => navigate("/")}>
+            QuickSell
+          </span>
           <div className="flex items-center gap-3 ">
             {!currentUser && (
               <>

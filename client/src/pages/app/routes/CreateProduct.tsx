@@ -27,8 +27,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useCreateProductMutation } from "@/services/apiServices";
+import { ErrorResponse } from "@/types/general";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = () => {
+  const navigate = useNavigate();
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(productValidator),
     values: {
@@ -71,8 +74,17 @@ const CreateProduct = () => {
     formData.append("extraImages", JSON.stringify(extraImages));
     try {
       await createProduct(formData);
-    } catch (err) {
+      toast({
+        title: "Product created successfully",
+        variant: "default",
+      });
+      navigate("/seller/dashboard/products");
+    } catch (err: ErrorResponse) {
       console.log(err);
+      toast({
+        variant: "destructive",
+        title: err.response.data.message,
+      });
     }
   };
   return (

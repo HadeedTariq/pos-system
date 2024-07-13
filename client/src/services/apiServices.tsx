@@ -5,6 +5,7 @@ import {
   RegisterSchema,
 } from "@/pages/auth/validators/user.validator";
 import { CreateProductSchema } from "@/pages/app/validators/product.validator";
+import { Product } from "@/pages/app/reducer/sellerReducer";
 
 export const posApi = createApi({
   reducerPath: "posApi",
@@ -49,9 +50,26 @@ export const posApi = createApi({
       }),
       invalidatesTags: ["ProductMutate"],
     }),
-    getSellerProducts: builder.query({
-      query: () => "/inventory/seller/products",
+    getSellerProducts: builder.query<Product[], void>({
+      query: () => ({
+        url: "/inventory/seller/products",
+      }),
       providesTags: ["ProductMutate"],
+    }),
+    deleteProduct: builder.mutation({
+      query: (productId: string) => ({
+        url: `/inventory/deleteProduct?productId=${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["ProductMutate"],
+    }),
+    editProduct: builder.mutation({
+      query: (product: any) => ({
+        url: `/inventory/editProduct`,
+        body: product,
+        method: "PUT",
+      }),
+      invalidatesTags: ["ProductMutate"],
     }),
   }),
 });
@@ -63,4 +81,6 @@ export const {
   useGetUserDetailsQuery,
   useCreateProductMutation,
   useGetSellerProductsQuery,
+  useDeleteProductMutation,
+  useEditProductMutation,
 } = posApi;

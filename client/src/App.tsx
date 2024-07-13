@@ -12,6 +12,7 @@ import CreateProduct from "./pages/app/routes/CreateProduct";
 import SellerDashboard from "./pages/app/routes/SellerDashboard";
 import SellerSidebar from "./pages/app/_components/SellerSidebar";
 import SellerProducts from "./pages/app/routes/SellerProducts";
+import SellerProductDetails from "./pages/app/routes/SellerProductDetails";
 
 function App() {
   const { theme } = useTheme();
@@ -47,7 +48,10 @@ function App() {
           <Route path="createProduct" element={<CreateProduct />} />
           <Route path="dashboard" element={<SellerSidebar />}>
             <Route index element={<SellerDashboard />} />
-            <Route path="products" element={<SellerProducts />} />
+            <Route path="products">
+              <Route index element={<SellerProducts />} />
+              <Route path="details" element={<SellerProductDetails />} />
+            </Route>
           </Route>
         </Route>
       </Route>

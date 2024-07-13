@@ -66,12 +66,15 @@ export class InventoryController {
     const result: any = await this.productService.uploadProductImage(file.path);
     this.productService.deletFileLocally(file.path);
 
+    const extraImages = JSON.parse(product.extraImages);
+
     return this.productService.createProduct(
       {
         ...product,
         image: result.secure_url,
         price: +product.price,
         stock: +product.stock,
+        extraImages,
       },
       req,
     );
@@ -86,24 +89,9 @@ export class InventoryController {
     return this.productService.deleteProduct(productId, req);
   }
 
-  // TODO: on frontend we will firstly get all the product details then the user can edit the product
   @UseGuards(AuthGuard)
   @Put('editProduct')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'src/uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-        },
-      }),
-    }),
-  )
-  async editProdcut(
-    @UploadedFile() file: Express.Multer.File,
+  async editProduct(
     @Body(ValidationPipe) editedProduct: EditProductDto,
     @Req() req: Request,
   ) {
@@ -114,18 +102,12 @@ export class InventoryController {
       throw new CustomException('Please set the value of stock to zero', 404);
     }
 
-    if (!file || !file.path) {
-      throw new CustomException('Product main image required', 404);
-    }
-
     return this.productService.editProduct(
       {
         ...editedProduct,
-        extraImages: JSON.parse(editedProduct.extraImages),
         price: +editedProduct.price,
         stock: +editedProduct.stock,
       },
-      file.path,
       req,
     );
   }
