@@ -48,7 +48,33 @@ export class DeleteProductDto {
   productId: string;
 }
 
-export class EditProductDto extends CreateProductDto {
+export class EditProductDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => parseFloat(value), { toClassOnly: true })
+  @IsNumber()
+  price: number;
+
+  @IsNotEmpty()
+  @IsString()
+  details: string;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => parseFloat(value), { toClassOnly: true })
+  @IsNumber()
+  stock: number;
+
+  @IsNotEmpty()
+  @IsString()
+  category: string;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => value === 'true', { toClassOnly: true })
+  @IsBoolean()
+  used: boolean;
   @IsNotEmpty()
   @IsString()
   @Length(24, 24)
@@ -57,6 +83,10 @@ export class EditProductDto extends CreateProductDto {
   @Transform(({ value }) => value === 'true', { toClassOnly: true })
   @IsBoolean()
   outOfStock: boolean;
+
+  @IsNotEmpty()
+  @IsArray()
+  extraImages: string[];
 }
 
 export class OrderProductDto {

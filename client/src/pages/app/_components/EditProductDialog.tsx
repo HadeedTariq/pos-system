@@ -38,7 +38,6 @@ import { Input } from "@/components/ui/input";
 import { useSeller } from "../hooks/useSeller";
 import { Navigate } from "react-router-dom";
 import { ErrorResponse } from "@/types/general";
-import { expandTagDescription } from "node_modules/@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 export function EditProductDialog({ productId }: { productId: string }) {
   const { products } = useSeller();
@@ -57,7 +56,7 @@ export function EditProductDialog({ productId }: { productId: string }) {
   });
 
   const [extraImages, setExtraImages] = useState<string[]>(
-    product?.extraImages || []
+    JSON.parse(JSON.stringify(product.extraImages)) || []
   );
   const [editProduct, { isLoading }] = useEditProductMutation();
 
@@ -72,16 +71,20 @@ export function EditProductDialog({ productId }: { productId: string }) {
       ...product,
       extraImages: extraImages,
       productId,
-      outOfStock: "false",
+      outOfStock: product.stock > 0 ? "false" : "true",
     };
-    console.log(productData);
 
     try {
       await editProduct(productData);
-    } catch (err: ErrorResponse) {
-      console.log(err);
       toast({
-        title: err.response.data.message,
+        title: "Product Edited Successfully",
+        variant: "default",
+      });
+    } catch (err) {
+      const error = err as ErrorResponse;
+      console.log(error);
+      toast({
+        title: error.response.data.message || "Somwthing went wrong",
         variant: "destructive",
       });
     }

@@ -104,11 +104,12 @@ export class ProductService {
     if (!product) {
       throw new CustomException('Product not found', 404);
     }
+    console.log(product.extraImages);
 
     await Product.findByIdAndUpdate(product._id, {
       ...editedProduct,
       used: String(product.used) === 'true' ? true : false,
-      extraImages: JSON.stringify(product.extraImages),
+      extraImages: product.extraImages,
     });
 
     return { message: 'Product Updated successfully' };

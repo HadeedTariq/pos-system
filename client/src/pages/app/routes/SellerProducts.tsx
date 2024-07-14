@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const SellerProducts = () => {
-  const { data: products, isLoading, isError } = useGetSellerProductsQuery();
+  const { data: products, isLoading, error } = useGetSellerProductsQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const SellerProducts = () => {
   }, [products]);
 
   if (isLoading) return <Loading />;
-  if (isError) return <Navigate to={"/seller/dashboard"} />;
+  if (error) return <Navigate to={"/seller/dashboard"} />;
   return (
     <div className="grid  grid-cols-3 gap-8 p-2 max-[1070px]:grid-cols-2 max-[600px]:grid-cols-1">
       {products?.map((product) => (

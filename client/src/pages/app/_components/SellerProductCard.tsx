@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Product } from "../reducer/sellerReducer";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import Loading from "@/components/Loading";
 import { useState } from "react";
 import { useDeleteProductMutation } from "@/services/apiServices";
 import { EditProductDialog } from "./EditProductDialog";

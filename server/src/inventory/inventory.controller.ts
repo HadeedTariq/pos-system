@@ -101,12 +101,14 @@ export class InventoryController {
     ) {
       throw new CustomException('Please set the value of stock to zero', 404);
     }
+    const extraImages = editedProduct.extraImages;
 
     return this.productService.editProduct(
       {
         ...editedProduct,
         price: +editedProduct.price,
         stock: +editedProduct.stock,
+        extraImages,
       },
       req,
     );
