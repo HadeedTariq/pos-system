@@ -4,7 +4,7 @@ type Theme = "dark" | "light" | "system";
 export type LoggedInUser = {
   name: string;
   email: string;
-  _id: string;
+  id: string;
   role: string;
 };
 

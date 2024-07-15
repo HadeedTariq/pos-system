@@ -42,7 +42,6 @@ import { ErrorResponse } from "@/types/general";
 export function EditProductDialog({ productId }: { productId: string }) {
   const { products } = useSeller();
   const product = products.find((prod) => prod._id === productId);
-  if (!product) return <Navigate to={"/seller/dashboard"} />;
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(productValidator),
     values: {
@@ -56,7 +55,7 @@ export function EditProductDialog({ productId }: { productId: string }) {
   });
 
   const [extraImages, setExtraImages] = useState<string[]>(
-    JSON.parse(JSON.stringify(product.extraImages)) || []
+    JSON.parse(JSON.stringify(product ? product.extraImages : "")) || []
   );
   const [editProduct, { isLoading }] = useEditProductMutation();
 
@@ -89,6 +88,7 @@ export function EditProductDialog({ productId }: { productId: string }) {
       });
     }
   };
+  if (!product) return <Navigate to={"/seller/dashboard"} />;
 
   return (
     <Dialog>

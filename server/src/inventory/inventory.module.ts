@@ -5,10 +5,12 @@ import { InventoryController } from './inventory.controller';
 import { ProductService } from './services/product/product.service';
 import { OrderService } from './services/order/order.service';
 import { SellerService } from './services/seller/seller.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, JwtModule],
   controllers: [InventoryController],
-  providers: [InventoryService, ProductService, OrderService,SellerService],
+  providers: [InventoryService, ProductService, OrderService, SellerService],
+  exports: [JwtModule],
 })
 export class InventoryModule {}

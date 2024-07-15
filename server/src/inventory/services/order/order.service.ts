@@ -23,10 +23,13 @@ export class OrderService {
       );
     }
 
+    const totalPrice = order.productQuantity * product.price;
+
     await Order.create({
       productId: product._id,
       requester_id: user.id,
       productQuantity: order.productQuantity,
+      totalPrice,
     });
     await ProductNotification.create({
       sender: user.id,

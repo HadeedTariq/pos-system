@@ -6,9 +6,11 @@ import { useState } from "react";
 import { useDeleteProductMutation } from "@/services/apiServices";
 import { EditProductDialog } from "./EditProductDialog";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../hooks/useApp";
 
-const SellerProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product }: { product: Product }) => {
   const navigate = useNavigate();
+  const { currentUser } = useApp();
   const productImages: string[] = product.extraImages;
   const [currentImage, setCurrentImage] = useState({
     src: product.image,
@@ -46,7 +48,7 @@ const SellerProductCard = ({ product }: { product: Product }) => {
         {productImages?.map((img, index) => (
           <img
             key={index}
-            className="w-[90px] h-[70px] object-cover cursor-pointer hover:opacity-75 transition duration-500"
+            className="w-[120px] h-[70px] object-cover cursor-pointer hover:opacity-75 transition duration-500"
             src={currentImage.src === img ? product.image : img}
             onClick={() =>
               imageSetter(currentImage.src === img ? product.image : img)
@@ -56,22 +58,31 @@ const SellerProductCard = ({ product }: { product: Product }) => {
         ))}
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-medium mb-2">{product.name}</h3>
+        <div className="flex items-center justify-between w-full">
+          <h3 className="text-lg font-medium mb-2">{product.name}</h3>
+          <p className="text-[14px] font-lato font-medium mb-2 bg-pink-600 rounded-md px-2">
+            {product.category}
+          </p>
+        </div>
         <p className="dark:text-gray-300 text-sm mb-4">{product.details}</p>
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">${product.price}</span>
         </div>
-        <div className="flex gap-2">
-          <EditProductDialog productId={product._id} />
-          <Button
-            variant={"destructive"}
-            onClick={async () => {
-              await deleteProduct(product._id);
-            }}
-            disabled={isLoading}>
-            Delete Product
-          </Button>
-        </div>
+        {currentUser?.role === "Seller" &&
+          currentUser.id === product.creator && (
+            <div className="flex gap-2">
+              <EditProductDialog productId={product._id} />
+              <Button
+                variant={"destructive"}
+                onClick={async () => {
+                  await deleteProduct(product._id);
+                }}
+                disabled={isLoading}>
+                Delete Product
+              </Button>
+            </div>
+          )}
+
         <Button
           variant={"gradient"}
           className="w-full mt-2"
@@ -83,4 +94,4 @@ const SellerProductCard = ({ product }: { product: Product }) => {
   );
 };
 
-export default SellerProductCard;
+export default ProductCard;

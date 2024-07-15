@@ -1,4 +1,4 @@
-import { Home, ShoppingBag } from "lucide-react";
+import { BellRing, Home, ShoppingBag } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import SellerSidebarSheet from "./SellerSidebarSheet";
 
@@ -35,6 +35,16 @@ const SellerSidebar = () => {
                 }`}>
                 <ShoppingBag />
                 Products
+              </Link>
+              <Link
+                to="products"
+                className={`flex items-center px-4 py-2 mt-2 gap-2 text-gray-100 hover:bg-gray-700 ${
+                  pathname === "/seller/dashboard/notifications"
+                    ? "bg-slate-700"
+                    : ""
+                }`}>
+                <BellRing />
+                Notifications
               </Link>
             </nav>
           </div>

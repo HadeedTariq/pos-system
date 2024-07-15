@@ -5,6 +5,7 @@ interface IRequest extends Document {
   requester_id: Schema.Types.ObjectId;
   status: string;
   productQuantity: number;
+  totalPrice:number
 }
 
 const orderSchema: Schema = new Schema({
@@ -16,6 +17,7 @@ const orderSchema: Schema = new Schema({
     default: 'pending',
   },
   productQuantity: { type: Number, required: true },
+  totalPrice: { type: Number, required: true },
 });
 
 export const Order = model<IRequest>('Order', orderSchema);

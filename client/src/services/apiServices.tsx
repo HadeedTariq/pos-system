@@ -4,13 +4,12 @@ import {
   LoginSchema,
   RegisterSchema,
 } from "@/pages/auth/validators/user.validator";
-import { CreateProductSchema } from "@/pages/app/validators/product.validator";
 import { Product } from "@/pages/app/reducer/sellerReducer";
 
 export const posApi = createApi({
   reducerPath: "posApi",
   baseQuery: fetchBaseQuery({ baseUrl: url, credentials: "include" }),
-  tagTypes: ["ProductMutate"],
+  tagTypes: ["ProductMutate", "AllProducts"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user: RegisterSchema) => ({
@@ -32,6 +31,7 @@ export const posApi = createApi({
         method: "POST",
         body: user,
       }),
+      invalidatesTags: ["AllProducts"],
     }),
     logoutUser: builder.mutation({
       query: () => ({
@@ -50,12 +50,6 @@ export const posApi = createApi({
       }),
       invalidatesTags: ["ProductMutate"],
     }),
-    getSellerProducts: builder.query<Product[], void>({
-      query: () => ({
-        url: "/inventory/seller/products",
-      }),
-      providesTags: ["ProductMutate"],
-    }),
     deleteProduct: builder.mutation({
       query: (productId: string) => ({
         url: `/inventory/deleteProduct?productId=${productId}`,
@@ -71,6 +65,26 @@ export const posApi = createApi({
       }),
       invalidatesTags: ["ProductMutate"],
     }),
+    getSellerProducts: builder.query<Product[], void>({
+      query: () => ({
+        url: "/inventory/seller/products",
+      }),
+      providesTags: ["ProductMutate"],
+    }),
+    getProducts: builder.query<Product[], void>({
+      query: () => ({
+        url: "/inventory/products",
+      }),
+      providesTags: ["AllProducts"],
+    }),
+    orderProduct: builder.mutation({
+      query: (product: any) => ({
+        url: "/inventory/orderProduct",
+        body: product,
+        method: "POST",
+      }),
+      invalidatesTags: ["AllProducts"],
+    }),
   }),
 });
 
@@ -83,4 +97,7 @@ export const {
   useGetSellerProductsQuery,
   useDeleteProductMutation,
   useEditProductMutation,
+  useGetProductsQuery,
+  useOrderProductMutation,
+  useLogoutUserMutation,
 } = posApi;

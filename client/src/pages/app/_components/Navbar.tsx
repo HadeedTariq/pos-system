@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useGetUserDetailsQuery } from "@/services/apiServices";
 import { setCurrentUser } from "@/reducers/fullAppReducer";
 import { useDispatch } from "react-redux";
+import MenuHandler from "./MenuHandler";
 
 const Navbar = () => {
   const { currentUser } = useApp();
@@ -59,6 +60,7 @@ const Navbar = () => {
               </Button>
             )}
             <ThemeHandler />
+            <MenuHandler />
           </div>
         </div>
       </nav>

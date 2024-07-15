@@ -114,6 +114,11 @@ export class InventoryController {
     );
   }
 
+  @Get('/products')
+  getProducts(@Req() req: Request) {
+    return this.productService.getProducts(req);
+  }
+
   @UseGuards(AuthGuard)
   @Post('orderProduct')
   orderProduct(

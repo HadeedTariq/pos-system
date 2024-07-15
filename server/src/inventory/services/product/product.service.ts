@@ -10,10 +10,12 @@ import {
   EditProductDto,
 } from 'src/inventory/dto/inventory.dto';
 import { Product } from 'src/inventory/schemas/products.model';
+import { JwtService } from '@nestjs/jwt';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class ProductService {
-  constructor() {
+  constructor(private jwtService: JwtService) {
     v2.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -113,5 +115,31 @@ export class ProductService {
     });
 
     return { message: 'Product Updated successfully' };
+  }
+  async getProducts(req: Request) {
+    const { accessToken } = req.cookies;
+    let user;
+    if (accessToken) {
+      user = this.jwtService.verify(accessToken, {
+        secret: process.env.JWT_ACCESS_SECRET,
+      });
+    }
+    let query = {
+      creator: { $ne: null },
+    };
+    if (user) {
+      console.log(user);
+      query = {
+        creator: { $ne: new mongoose.Types.ObjectId(user.id) },
+      };
+    }
+
+    const products = await Product.aggregate([
+      {
+        $match: query,
+      },
+    ]);
+
+    return products;
   }
 }
