@@ -50,8 +50,9 @@ const StockHandler = ({ product }: { product: Product }) => {
       });
     }
     if (error) {
+      const err: any = error;
       toast({
-        title: error.data.message,
+        title: err.data.message,
         variant: "destructive",
       });
     }

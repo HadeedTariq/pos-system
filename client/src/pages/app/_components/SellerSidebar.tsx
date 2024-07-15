@@ -37,7 +37,7 @@ const SellerSidebar = () => {
                 Products
               </Link>
               <Link
-                to="products"
+                to="notifications"
                 className={`flex items-center px-4 py-2 mt-2 gap-2 text-gray-100 hover:bg-gray-700 ${
                   pathname === "/seller/dashboard/notifications"
                     ? "bg-slate-700"

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import * as mongoose from 'mongoose';
+import { ProductNotification } from 'src/inventory/schemas/productNotification.model';
 import { Product } from 'src/inventory/schemas/products.model';
 
 @Injectable()
@@ -98,5 +99,34 @@ export class SellerService {
     ]);
 
     return sellerPendingOrders;
+  }
+  async getSellerNotification(req: Request) {
+    const user: any = req.user;
+
+    const notifications = await ProductNotification.aggregate([
+      {
+        $match: {
+          receiver: new mongoose.Types.ObjectId(user.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'sender',
+          foreignField: '_id',
+          as: 'sender',
+          pipeline: [
+            {
+              $project: {
+                name: 1,
+                role: 1,
+                _id: 1,
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    return notifications;
   }
 }

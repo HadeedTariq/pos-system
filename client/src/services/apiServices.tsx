@@ -9,7 +9,7 @@ import { Product } from "@/pages/app/reducer/sellerReducer";
 export const posApi = createApi({
   reducerPath: "posApi",
   baseQuery: fetchBaseQuery({ baseUrl: url, credentials: "include" }),
-  tagTypes: ["ProductMutate", "AllProducts"],
+  tagTypes: ["ProductMutate", "AllProducts", "SellerNotifications"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user: RegisterSchema) => ({
@@ -65,12 +65,6 @@ export const posApi = createApi({
       }),
       invalidatesTags: ["ProductMutate"],
     }),
-    getSellerProducts: builder.query<Product[], void>({
-      query: () => ({
-        url: "/inventory/seller/products",
-      }),
-      providesTags: ["ProductMutate"],
-    }),
     getProducts: builder.query<Product[], void>({
       query: () => ({
         url: "/inventory/products",
@@ -84,6 +78,18 @@ export const posApi = createApi({
         method: "POST",
       }),
       invalidatesTags: ["AllProducts"],
+    }),
+    getSellerProducts: builder.query<Product[], void>({
+      query: () => ({
+        url: "/inventory/seller/products",
+      }),
+      providesTags: ["ProductMutate"],
+    }),
+    sellerNotifications: builder.query({
+      query: () => ({
+        url: "/inventory/seller/notifications",
+      }),
+      providesTags: ["SellerNotifications"],
     }),
   }),
 });
@@ -100,4 +106,5 @@ export const {
   useGetProductsQuery,
   useOrderProductMutation,
   useLogoutUserMutation,
+  useSellerNotificationsQuery,
 } = posApi;

@@ -128,7 +128,6 @@ export class ProductService {
       creator: { $ne: null },
     };
     if (user) {
-      console.log(user);
       query = {
         creator: { $ne: new mongoose.Types.ObjectId(user.id) },
       };

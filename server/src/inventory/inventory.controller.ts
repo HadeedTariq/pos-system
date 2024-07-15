@@ -170,4 +170,9 @@ export class InventoryController {
   getSellerPendingOrders(@Req() req: Request) {
     return this.sellerService.getSellerPendingOrders(req);
   }
+  @UseGuards(AuthGuard)
+  @Get('seller/notifications')
+  getSellerNotification(@Req() req: Request) {
+    return this.sellerService.getSellerNotification(req);
+  }
 }
