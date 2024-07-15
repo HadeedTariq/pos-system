@@ -5,6 +5,7 @@ import {
   RegisterSchema,
 } from "@/pages/auth/validators/user.validator";
 import { Product } from "@/pages/app/reducer/sellerReducer";
+import { SellerNotificationsType } from "@/types/general";
 
 export const posApi = createApi({
   reducerPath: "posApi",
@@ -85,11 +86,27 @@ export const posApi = createApi({
       }),
       providesTags: ["ProductMutate"],
     }),
-    sellerNotifications: builder.query({
+    sellerNotifications: builder.query<SellerNotificationsType[], void>({
       query: () => ({
         url: "/inventory/seller/notifications",
       }),
       providesTags: ["SellerNotifications"],
+    }),
+    deleiverOrder: builder.mutation({
+      query: (orderId: string) => ({
+        url: "/inventory/seller/deleiverProduct",
+        method: "PUT",
+        body: { orderId },
+      }),
+      invalidatesTags: ["SellerNotifications"],
+    }),
+    cancelOrder: builder.mutation({
+      query: (orderId: string) => ({
+        url: "/inventory/seller/cancelOrder",
+        method: "PUT",
+        body: { orderId },
+      }),
+      invalidatesTags: ["SellerNotifications"],
     }),
   }),
 });
@@ -107,4 +124,6 @@ export const {
   useOrderProductMutation,
   useLogoutUserMutation,
   useSellerNotificationsQuery,
+  useDeleiverOrderMutation,
+  useCancelOrderMutation,
 } = posApi;

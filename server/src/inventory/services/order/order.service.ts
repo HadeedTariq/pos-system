@@ -25,7 +25,7 @@ export class OrderService {
 
     const totalPrice = order.productQuantity * product.price;
 
-    await Order.create({
+    const newOrder = await Order.create({
       productId: product._id,
       requester_id: user.id,
       productQuantity: order.productQuantity,
@@ -36,6 +36,7 @@ export class OrderService {
       receiver: product.creator,
       message: `${user.name} request for ${order.productQuantity} ${product.name}`,
       productId: product._id,
+      orderId: newOrder._id,
     });
 
     const remainingStock = product.stock - order.productQuantity;
@@ -63,6 +64,7 @@ export class OrderService {
       receiver: updateOrder.requester_id,
       message: `Your order reached`,
       productId: updateOrder.productId,
+      orderId: updateOrder._id,
     });
 
     return { message: 'Order deleivered successfully' };
@@ -92,6 +94,7 @@ export class OrderService {
       receiver: updateOrder.requester_id,
       message: `Your order canceled`,
       productId: updateOrder.productId,
+      orderId: updateOrder._id,
     });
 
     return { message: 'Order canceled successfully' };
@@ -120,6 +123,7 @@ export class OrderService {
       receiver: product.creator,
       message: `User cancel the order of ${product.name}`,
       productId: updateOrder.productId,
+      orderId: updateOrder._id,
     });
 
     return { message: 'Order canceled successfully' };

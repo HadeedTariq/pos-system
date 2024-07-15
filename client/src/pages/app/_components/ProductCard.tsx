@@ -25,9 +25,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   const [deleteProduct, { isLoading }] = useDeleteProductMutation();
 
   return (
-    <div
-      key={product._id}
-      className="bg-white dark:bg-slate-700 rounded-lg overflow-hidden shadow-lg ring-4 ring-red-500 max-[600px]:mx-auto ring-opacity-40 max-w-sm h-fit">
+    <div className="bg-white dark:bg-slate-700 rounded-lg overflow-hidden shadow-lg ring-4 ring-red-500 max-[600px]:mx-auto ring-opacity-40 max-w-sm h-fit">
       <div className="relative">
         <LazyLoadImage
           placeholderSrc={"defaultPlaceholder.jpg"}

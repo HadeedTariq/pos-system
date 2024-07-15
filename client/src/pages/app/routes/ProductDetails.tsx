@@ -42,7 +42,7 @@ const ProductDetails = () => {
               {product.details}
             </p>
             <div className="mb-4">
-              <span className="font-bold  text-gray-700 dark:text-gray-300">
+              <span className="font-bold text-xl font-openSans  text-gray-700 dark:text-gray-300">
                 Select Images:
               </span>
               <div className="flex gap-3 items-center mt-2">
@@ -62,10 +62,10 @@ const ProductDetails = () => {
               </div>
             </div>
             <div>
-              <span className="font-bold text-gray-700 dark:text-gray-300">
+              <span className="font-bold text-xl font-openSans text-gray-700 dark:text-gray-300">
                 Product Description:
               </span>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
+              <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
                 {product.details}
               </p>
             </div>

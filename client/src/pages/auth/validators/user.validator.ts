@@ -13,7 +13,7 @@ export const loginValidator = z.object({
   email: z.string().email(),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters long")
+    .min(2, "Password must be at least 8 characters long")
     .max(20, "Password must be less than 20 characters long"),
 });
 

@@ -59,21 +59,21 @@ const StockHandler = ({ product }: { product: Product }) => {
   };
   return (
     <div className="mt-2">
-      <p>Product Price</p>
+      <p className="font-bold font-openSans text-xl">Product Price</p>
       <div className="flex mb-4">
         <div className="mr-4 gap-3">
-          <span className="font-bold text-gray-700 dark:text-gray-300">
+          <span className="font-bold text-lg text-gray-700 dark:text-gray-300">
             Price:
           </span>
-          <span className="text-red-600 font-ptSans dark:text-red-400 ml-1 ">
+          <span className="text-red-600 text-lg font-ptSans dark:text-red-400 ml-1 ">
             ${productPrice}
           </span>
         </div>
         <div>
-          <span className="font-bold text-gray-700 dark:text-gray-300">
+          <span className="font-bold text-lg text-gray-700 dark:text-gray-300">
             Availability:
           </span>
-          <span className="text-gray-600 dark:text-gray-300">
+          <span className="text-gray-600 text-lg dark:text-gray-300">
             {product.outOfStock ? "Out of stock" : "In Stock"}
           </span>
         </div>

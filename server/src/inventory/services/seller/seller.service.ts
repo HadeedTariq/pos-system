@@ -126,6 +126,27 @@ export class SellerService {
           ],
         },
       },
+      {
+        $lookup: {
+          from: 'orders',
+          foreignField: '_id',
+          localField: 'orderId',
+          as: 'order',
+          pipeline: [
+            {
+              $project: {
+                status: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$sender',
+      },
+      {
+        $unwind: '$order',
+      },
     ]);
     return notifications;
   }
