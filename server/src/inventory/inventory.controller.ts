@@ -175,4 +175,10 @@ export class InventoryController {
   getSellerNotification(@Req() req: Request) {
     return this.sellerService.getSellerNotification(req);
   }
+
+  @UseGuards(AuthGuard)
+  @Get("myOrders")
+  getMyOrders(@Req() req: Request){
+    return this.orderService.getMyOrders(req);
+  }
 }

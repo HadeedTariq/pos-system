@@ -5,12 +5,18 @@ import {
   RegisterSchema,
 } from "@/pages/auth/validators/user.validator";
 import { Product } from "@/pages/app/reducer/sellerReducer";
-import { SellerNotificationsType } from "@/types/general";
+import { OrderItem, SellerNotificationsType } from "@/types/general";
 
 export const posApi = createApi({
   reducerPath: "posApi",
   baseQuery: fetchBaseQuery({ baseUrl: url, credentials: "include" }),
-  tagTypes: ["ProductMutate", "AllProducts", "SellerNotifications"],
+  tagTypes: [
+    "ProductMutate",
+    "AllProducts",
+    "SellerNotifications",
+    "UserOrders",
+    "UserNotifications",
+  ],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user: RegisterSchema) => ({
@@ -78,7 +84,7 @@ export const posApi = createApi({
         body: product,
         method: "POST",
       }),
-      invalidatesTags: ["AllProducts"],
+      invalidatesTags: ["AllProducts", "UserOrders"],
     }),
     getSellerProducts: builder.query<Product[], void>({
       query: () => ({
@@ -108,6 +114,20 @@ export const posApi = createApi({
       }),
       invalidatesTags: ["SellerNotifications"],
     }),
+    userCancelOrder: builder.mutation({
+      query: (orderId: string) => ({
+        url: "/inventory/user/cancelOrder",
+        method: "PUT",
+        body: { orderId },
+      }),
+      invalidatesTags: ["SellerNotifications", "UserOrders"],
+    }),
+    myOrders: builder.query<OrderItem[], void>({
+      query: () => ({
+        url: "/inventory/myOrders",
+      }),
+      providesTags: ["UserOrders"],
+    }),
   }),
 });
 
@@ -126,4 +146,6 @@ export const {
   useSellerNotificationsQuery,
   useDeleiverOrderMutation,
   useCancelOrderMutation,
+  useMyOrdersQuery,
+  useUserCancelOrderMutation,
 } = posApi;

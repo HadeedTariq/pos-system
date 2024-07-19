@@ -15,6 +15,9 @@ import SellerProducts from "./pages/app/routes/SellerProducts";
 import SellerProductDetails from "./pages/app/routes/SellerProductDetails";
 import ProductDetails from "./pages/app/routes/ProductDetails";
 import SellerNotifications from "./pages/app/routes/SellerNotifications";
+import UserDashboard from "./pages/app/routes/UserDashboard";
+import UserDashboardSidebar from "./pages/app/_components/UserDashboardSidebar";
+import UserOrders from "./pages/app/routes/UserOrders";
 
 function App() {
   const { theme } = useTheme();
@@ -47,6 +50,10 @@ function App() {
       <Route path="/" element={<Navbar />}>
         <Route index element={<Home />} />
         <Route path="details" element={<ProductDetails />} />
+        <Route path="dashboard" element={<UserDashboardSidebar />}>
+          <Route index element={<UserDashboard />} />
+          <Route path="orders" element={<UserOrders />} />
+        </Route>
         <Route path="seller" element={<SellerProtector />}>
           <Route path="createProduct" element={<CreateProduct />} />
           <Route path="dashboard" element={<SellerSidebar />}>

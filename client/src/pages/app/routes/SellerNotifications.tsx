@@ -85,7 +85,7 @@ function NotificationComponent({
         )}
         {notification.order.status === "cancel" && (
           <Button variant={"destructive"} disabled>
-            Deleivered
+            Canceled
           </Button>
         )}
         {notification.order.status === "delivered" && (

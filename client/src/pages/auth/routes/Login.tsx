@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, loginValidator } from "../validators/user.validator";
 import { useLoginUserMutation } from "@/services/apiServices";
 import { toast } from "@/components/ui/use-toast";
+import { ErrorResponse } from "@/types/general";
 
 export function LoginForm() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -37,11 +38,19 @@ export function LoginForm() {
   });
 
   const onSubmit = async (formData: LoginSchema) => {
-    const { data } = await loginUser(formData);
-    toast({
-      title: data.message,
-    });
-    navigate("/");
+    const { data, error } = await loginUser(formData);
+    if (data) {
+      toast({
+        title: data.message,
+      });
+      navigate("/");
+    } else if (error) {
+      const err: ErrorResponse = error as any;
+      toast({
+        title: err.data.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (

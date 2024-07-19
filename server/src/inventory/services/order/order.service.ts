@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
+import mongoose from 'mongoose';
 import { CustomException } from 'src/custom.exception';
 import { OrderProductDto } from 'src/inventory/dto/inventory.dto';
 import { Order } from 'src/inventory/schemas/order.model';
@@ -103,6 +104,14 @@ export class OrderService {
   async cancelOrderByUser(req: Request, orderId: string) {
     const user: any = req.user;
 
+    const { status } = await Order.findOne({
+      _id: orderId,
+    });
+
+    if (status && status === 'delivered') {
+      return { message: "Your order is deleiverd You cann't Cancel it" };
+    }
+
     const updateOrder = await Order.findByIdAndUpdate(orderId, {
       status: 'cancel',
     });
@@ -127,5 +136,39 @@ export class OrderService {
     });
 
     return { message: 'Order canceled successfully' };
+  }
+
+  async getMyOrders(req: Request) {
+    const user: any = req.user;
+
+    const myOrders = await Order.aggregate([
+      {
+        $match: {
+          requester_id: new mongoose.Types.ObjectId(user.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'productId',
+          foreignField: '_id',
+          as: 'product',
+          pipeline: [
+            {
+              $project: {
+                name: 1,
+                image: 1,
+                price: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$product',
+      },
+    ]);
+
+    return myOrders;
   }
 }
