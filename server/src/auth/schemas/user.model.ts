@@ -8,6 +8,7 @@ export interface UserDocument extends Document {
   isPasswordCorrect(password: string): Promise<boolean>;
   role: string;
   refreshToken: string;
+  provider: 'app' | 'google';
 }
 
 export const userSchema = new Schema<UserDocument>(
@@ -29,7 +30,7 @@ export const userSchema = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [false, 'Password is required'],
     },
     refreshToken: {
       type: String,
@@ -39,6 +40,11 @@ export const userSchema = new Schema<UserDocument>(
       type: String,
       enum: ['Seller', 'User', 'Admin'],
       default: 'User',
+    },
+    provider: {
+      type: String,
+      enum: ['google', 'app'],
+      default: 'app',
     },
   },
   {
