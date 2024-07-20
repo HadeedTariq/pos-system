@@ -3,9 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Post,
   Put,
   Query,
+  RawBodyRequest,
   Req,
   UploadedFile,
   UseGuards,
@@ -30,7 +33,7 @@ import { InventoryService } from './inventory.service';
 import { ProductService } from './services/product/product.service';
 import { OrderService } from './services/order/order.service';
 import { SellerService } from './services/seller/seller.service';
-
+import Stripe from 'stripe';
 @Controller('inventory')
 export class InventoryController {
   constructor(
@@ -177,8 +180,31 @@ export class InventoryController {
   }
 
   @UseGuards(AuthGuard)
-  @Get("myOrders")
-  getMyOrders(@Req() req: Request){
+  @Get('myOrders')
+  getMyOrders(@Req() req: Request) {
     return this.orderService.getMyOrders(req);
+  }
+
+  @Post('webhook')
+  async stripeWebHook(@Req() req: RawBodyRequest<Request>) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET);
+    const sig = req.headers['stripe-signature'];
+
+    const rawBody = req.rawBody;
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        rawBody,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET,
+      );
+      await this.orderService.handleEvent(event);
+    } catch (err) {
+      console.log(err, 'handleWebhook');
+      throw new HttpException(
+        `Webhook Error: ${err.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

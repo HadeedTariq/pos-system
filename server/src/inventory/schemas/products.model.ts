@@ -11,7 +11,10 @@ interface IProduct extends Document {
   category: string;
   used: boolean;
   outOfStock: boolean;
-  purchasers: string[];
+  purchasers: {
+    user: string;
+    quantity: number;
+  }[];
 }
 
 const productSchema: Schema = new Schema(
@@ -28,7 +31,12 @@ const productSchema: Schema = new Schema(
     category: { type: String, required: true },
     used: { type: Boolean, required: true },
     outOfStock: { type: Boolean, default: false },
-    purchasers: { type: [Schema.Types.ObjectId], ref: 'User' },
+    purchasers: [
+      {
+        user: { type: [Schema.Types.ObjectId], ref: 'User' },
+        quantity: Number,
+      },
+    ],
   },
   { timestamps: true },
 );

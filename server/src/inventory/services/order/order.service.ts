@@ -6,6 +6,7 @@ import { OrderProductDto } from 'src/inventory/dto/inventory.dto';
 import { Order } from 'src/inventory/schemas/order.model';
 import { ProductNotification } from 'src/inventory/schemas/productNotification.model';
 import { Product } from 'src/inventory/schemas/products.model';
+import Stripe from 'stripe';
 
 @Injectable()
 export class OrderService {
@@ -170,5 +171,23 @@ export class OrderService {
     ]);
 
     return myOrders;
+  }
+
+  async handleEvent(event: Stripe.Event) {
+    console.log('event called');
+
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object;
+        console.log(paymentIntent, 'paymentIntent');
+        break;
+      case 'identity.verification_session.created':
+        const verificationCreated = event.data.object;
+        console.log(verificationCreated, 'verificationCreated');
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+    return { message: 'Request accepted' };
   }
 }

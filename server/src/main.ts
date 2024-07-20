@@ -6,7 +6,7 @@ import { CustomExceptionFilter } from './exception.filter';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
   const configureService = app.get(ConfigService);
   const port = configureService.get<number>('PORT');
   const clientUrl = configureService.get<string>('CLIENT_URL');
