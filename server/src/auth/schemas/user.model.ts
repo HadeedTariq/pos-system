@@ -30,7 +30,7 @@ export const userSchema = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: [false, 'Password is required'],
+      required: false,
     },
     refreshToken: {
       type: String,

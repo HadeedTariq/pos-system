@@ -8,6 +8,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 
 type UserAuth = { name: string; email: string; _id: string; role: string };
+type GoogleUser = {
+  provider: string;
+  providerId: string;
+  email: string;
+  name: string;
+  picture: string;
+};
 
 @Injectable()
 export class AuthService {
@@ -187,5 +194,58 @@ export class AuthService {
         sameSite: 'none',
       })
       .json({ message: 'User logged out' });
+  }
+
+  async signInUserWithGoogle(req: Request, res: Response) {
+    const user = req.user as GoogleUser;
+
+    const existedUser = await User.findOne({
+      email: user.email,
+    });
+    if (existedUser) {
+      const { accessToken, refreshToken } = this.generateAccessAndRefreshToken(
+        existedUser as UserAuth,
+      );
+      res
+        .cookie('accessToken', accessToken, {
+          secure: true,
+          httpOnly: false,
+          sameSite: 'none',
+        })
+        .cookie('refreshToken', refreshToken, {
+          secure: true,
+          httpOnly: false,
+          sameSite: 'none',
+        });
+
+      throw new CustomException('User logged in successfully', 200);
+    }
+
+    const createdUser = new User({
+      email: user.email,
+      name: user.name,
+      provider: user.provider,
+    });
+    await createdUser.save({ validateBeforeSave: false });
+
+    const { accessToken, refreshToken } = this.generateAccessAndRefreshToken(
+      createdUser as UserAuth,
+    );
+
+    createdUser.refreshToken = refreshToken;
+    await createdUser.save({ validateBeforeSave: false });
+    res
+      .cookie('accessToken', accessToken, {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      })
+      .cookie('refreshToken', refreshToken, {
+        secure: true,
+        httpOnly: false,
+        sameSite: 'none',
+      });
+
+    throw new CustomException('User logged in successfully', 200);
   }
 }
