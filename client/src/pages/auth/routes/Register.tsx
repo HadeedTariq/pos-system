@@ -28,6 +28,7 @@ import { useRegisterUserMutation } from "@/services/apiServices";
 import { toast } from "@/components/ui/use-toast";
 import { useDispatch } from "react-redux";
 import { setUser } from "../reducer/authReducer";
+import GoogleAuth from "../_components/GoogleAuth";
 
 export function Register() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
@@ -64,7 +65,7 @@ export function Register() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-[350px]">
+            className="space-y-8 w-[350px] pr-4">
             <FormField
               control={form.control}
               name="name"
@@ -121,6 +122,7 @@ export function Register() {
             </Button>
           </form>
         </Form>
+        <GoogleAuth />
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
           <Link to={"/auth/login"} className="underline">

@@ -24,6 +24,7 @@ import { LoginSchema, loginValidator } from "../validators/user.validator";
 import { useLoginUserMutation } from "@/services/apiServices";
 import { toast } from "@/components/ui/use-toast";
 import { ErrorResponse } from "@/types/general";
+import GoogleAuth from "../_components/GoogleAuth";
 
 export function LoginForm() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -63,7 +64,7 @@ export function LoginForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-[350px]">
+            className="space-y-8 w-[350px] pr-4">
             <FormField
               control={form.control}
               name="email"
@@ -103,6 +104,7 @@ export function LoginForm() {
             </Button>
           </form>
         </Form>
+        <GoogleAuth />
         <div className="mt-4 text-center text-sm">
           Don't have an account?{" "}
           <Link to={"/auth/register"} className="underline">

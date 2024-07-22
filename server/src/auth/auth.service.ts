@@ -216,9 +216,9 @@ export class AuthService {
           secure: true,
           httpOnly: false,
           sameSite: 'none',
-        });
-
-      throw new CustomException('User logged in successfully', 200);
+        })
+        .redirect('http://localhost:5173');
+      return;
     }
 
     const createdUser = new User({
@@ -244,8 +244,8 @@ export class AuthService {
         secure: true,
         httpOnly: false,
         sameSite: 'none',
-      });
-
-    throw new CustomException('User logged in successfully', 200);
+      })
+      .redirect('http://localhost:5173');
+    return;
   }
 }

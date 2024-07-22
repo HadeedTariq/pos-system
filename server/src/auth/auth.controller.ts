@@ -21,7 +21,6 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   handleLogin() {}
 
-  // api/auth/google/redirect
   @Get('google/callback')
   @UseGuards(GoogleOAuthGuard)
   handleRedirect(@Req() req: Request, @Res() res: Response) {
