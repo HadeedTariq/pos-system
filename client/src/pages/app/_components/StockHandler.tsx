@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Product } from "../reducer/sellerReducer";
-import { DiamondMinus, DiamondPlus, IndentDecrease } from "lucide-react";
+import { DiamondMinus, DiamondPlus } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { useOrderProductMutation } from "@/services/apiServices";

@@ -79,11 +79,11 @@ const CreateProduct = () => {
         variant: "default",
       });
       navigate("/seller/dashboard/products");
-    } catch (err: ErrorResponse) {
-      console.log(err);
+    } catch (err) {
+      const error = err as ErrorResponse;
       toast({
         variant: "destructive",
-        title: err.response.data.message,
+        title: error.data.message,
       });
     }
   };

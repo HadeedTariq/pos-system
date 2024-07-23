@@ -2,7 +2,6 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { useGetProductsQuery } from "@/services/apiServices";
 import StockHandler from "../_components/StockHandler";
-import { Button } from "@/components/ui/button";
 
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();

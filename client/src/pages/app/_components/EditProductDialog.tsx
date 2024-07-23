@@ -81,9 +81,8 @@ export function EditProductDialog({ productId }: { productId: string }) {
       });
     } catch (err) {
       const error = err as ErrorResponse;
-      console.log(error);
       toast({
-        title: error.response.data.message || "Somwthing went wrong",
+        title: error.data.message || "Somwthing went wrong",
         variant: "destructive",
       });
     }
