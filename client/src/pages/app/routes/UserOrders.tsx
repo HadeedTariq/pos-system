@@ -50,15 +50,19 @@ const UserOrders = () => {
     );
   return (
     <div>
-      <Component orders={data} />
+      <UserOrderTable orders={data} />
     </div>
   );
 };
 
 export default UserOrders;
 
-export function Component({ orders }: { orders: OrderItem[] | undefined }) {
-  const [cancelOrder, { isLoading }] = useUserCancelOrderMutation();
+export function UserOrderTable({
+  orders,
+}: {
+  orders: OrderItem[] | undefined;
+}) {
+  const [cancelOrder] = useUserCancelOrderMutation();
   return (
     <Card className="mr-2">
       <CardHeader>
