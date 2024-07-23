@@ -217,7 +217,7 @@ export class AuthService {
           httpOnly: false,
           sameSite: 'none',
         })
-        .redirect('http://localhost:5173');
+        .redirect(process.env.CLIENT_URL);
       return;
     }
 
@@ -245,7 +245,7 @@ export class AuthService {
         httpOnly: false,
         sameSite: 'none',
       })
-      .redirect('http://localhost:5173');
+      .redirect(process.env.CLIENT_URL);
     return;
   }
 }

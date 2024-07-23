@@ -179,7 +179,7 @@ let AuthService = class AuthService {
                 httpOnly: false,
                 sameSite: 'none',
             })
-                .redirect('http://localhost:5173');
+                .redirect(process.env.CLIENT_URL);
             return;
         }
         const createdUser = new user_model_1.User({
@@ -202,7 +202,7 @@ let AuthService = class AuthService {
             httpOnly: false,
             sameSite: 'none',
         })
-            .redirect('http://localhost:5173');
+            .redirect(process.env.CLIENT_URL);
         return;
     }
 };

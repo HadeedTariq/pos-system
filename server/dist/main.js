@@ -13,7 +13,7 @@ async function bootstrap() {
     const port = configureService.get('PORT');
     const clientUrl = configureService.get('CLIENT_URL');
     app.enableCors({
-        origin: [clientUrl, 'http://192.168.10.7:5173'],
+        origin: [clientUrl, 'http://localhost:5173'],
         credentials: true,
         exposedHeaders: ['Set-Cookie'],
     });
