@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
-const multer_1 = require("multer");
-const path_1 = require("path");
 const inventory_dto_1 = require("./dto/inventory.dto");
 const auth_guard_1 = require("../auth/auth.guard");
 const custom_exception_1 = require("../custom.exception");
@@ -33,11 +31,10 @@ let InventoryController = class InventoryController {
         this.sellerService = sellerService;
     }
     async createProduct(file, req, product) {
-        if (!file || !file.path) {
+        if (!file) {
             throw new custom_exception_1.CustomException('Product main image required', 404);
         }
-        const result = await this.productService.uploadProductImage(file.path);
-        this.productService.deletFileLocally(file.path);
+        const result = await this.productService.uploadProductImage(file);
         const extraImages = JSON.parse(product.extraImages);
         return this.productService.createProduct({
             ...product,
@@ -112,16 +109,7 @@ exports.InventoryController = InventoryController;
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('createProduct'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
-        storage: (0, multer_1.diskStorage)({
-            destination: 'src/uploads',
-            filename: (req, file, callback) => {
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-                const ext = (0, path_1.extname)(file.originalname);
-                callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-            },
-        }),
-    })),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Req)()),
     __param(2, (0, common_1.Body)(common_1.ValidationPipe)),

@@ -14,7 +14,6 @@ const auth_module_1 = require("./auth/auth.module");
 const config_1 = require("@nestjs/config");
 const passport_1 = require("@nestjs/passport");
 const inventory_module_1 = require("./inventory/inventory.module");
-const platform_express_1 = require("@nestjs/platform-express");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,9 +23,6 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
             auth_module_1.AuthModule,
-            platform_express_1.MulterModule.register({
-                dest: './uploads',
-            }),
             inventory_module_1.InventoryModule,
         ],
         controllers: [app_controller_1.AppController],

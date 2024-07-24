@@ -16,8 +16,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import {
   CancelOrderDto,
   CreateProductDto,
@@ -44,30 +42,17 @@ export class InventoryController {
   ) {}
   @UseGuards(AuthGuard)
   @Post('createProduct')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'src/uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   async createProduct(
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
     @Body(ValidationPipe) product: CreateProductDto,
   ) {
-    if (!file || !file.path) {
+    if (!file) {
       throw new CustomException('Product main image required', 404);
     }
 
-    const result: any = await this.productService.uploadProductImage(file.path);
-    this.productService.deletFileLocally(file.path);
+    const result: any = await this.productService.uploadProductImage(file);
 
     const extraImages = JSON.parse(product.extraImages);
 

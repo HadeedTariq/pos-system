@@ -4,8 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 export declare class ProductService {
     private jwtService;
     constructor(jwtService: JwtService);
-    uploadProductImage(file: string): Promise<unknown>;
-    deletFileLocally(filePath: string): Promise<void>;
+    uploadProductImage(file: any): Promise<unknown>;
     deletFileFromCloudinary(image: string): Promise<void>;
     createProduct(product: CreateProductDto & {
         image: string;

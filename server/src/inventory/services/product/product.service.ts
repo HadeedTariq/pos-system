@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { v2 } from 'cloudinary';
 import { Request } from 'express';
 import { CustomException } from 'src/custom.exception';
-import * as fs from 'fs';
 import { promisify } from 'util';
 import { extractPublicId } from 'cloudinary-build-url';
 import {
@@ -12,6 +11,7 @@ import {
 import { Product } from 'src/inventory/schemas/products.model';
 import { JwtService } from '@nestjs/jwt';
 import mongoose from 'mongoose';
+import * as streamifier from 'streamifier';
 
 @Injectable()
 export class ProductService {
@@ -23,27 +23,19 @@ export class ProductService {
     });
   }
 
-  async uploadProductImage(file: string) {
+  async uploadProductImage(file: any) {
     return new Promise((resolve, reject) => {
-      v2.uploader.upload(file, {}, (err, result) => {
-        if (err) return reject(err);
-        resolve(result);
+      let stream = v2.uploader.upload_stream((error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       });
+      streamifier.createReadStream(file.buffer).pipe(stream);
     });
   }
 
-  async deletFileLocally(filePath: string) {
-    try {
-      const unlinkAsync = promisify(fs.unlink);
-      await unlinkAsync(filePath);
-    } catch (err) {
-      console.log(err);
-      throw new CustomException(
-        'Something went wrong while deleting file locally',
-        404,
-      );
-    }
-  }
   async deletFileFromCloudinary(image: string) {
     try {
       const publicId = extractPublicId(image);

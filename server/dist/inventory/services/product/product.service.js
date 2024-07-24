@@ -13,12 +13,11 @@ exports.ProductService = void 0;
 const common_1 = require("@nestjs/common");
 const cloudinary_1 = require("cloudinary");
 const custom_exception_1 = require("../../../custom.exception");
-const fs = require("fs");
-const util_1 = require("util");
 const cloudinary_build_url_1 = require("cloudinary-build-url");
 const products_model_1 = require("../../schemas/products.model");
 const jwt_1 = require("@nestjs/jwt");
 const mongoose_1 = require("mongoose");
+const streamifier = require("streamifier");
 let ProductService = class ProductService {
     constructor(jwtService) {
         this.jwtService = jwtService;
@@ -30,22 +29,16 @@ let ProductService = class ProductService {
     }
     async uploadProductImage(file) {
         return new Promise((resolve, reject) => {
-            cloudinary_1.v2.uploader.upload(file, {}, (err, result) => {
-                if (err)
-                    return reject(err);
-                resolve(result);
+            let stream = cloudinary_1.v2.uploader.upload_stream((error, result) => {
+                if (result) {
+                    resolve(result);
+                }
+                else {
+                    reject(error);
+                }
             });
+            streamifier.createReadStream(file.buffer).pipe(stream);
         });
-    }
-    async deletFileLocally(filePath) {
-        try {
-            const unlinkAsync = (0, util_1.promisify)(fs.unlink);
-            await unlinkAsync(filePath);
-        }
-        catch (err) {
-            console.log(err);
-            throw new custom_exception_1.CustomException('Something went wrong while deleting file locally', 404);
-        }
     }
     async deletFileFromCloudinary(image) {
         try {
