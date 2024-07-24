@@ -12,7 +12,7 @@ async function bootstrap() {
   const port = configureService.get<number>('PORT');
   const clientUrl = configureService.get<string>('CLIENT_URL');
   app.enableCors({
-    origin: [clientUrl, 'http://localhost:5173'],
+    origin: [clientUrl, 'http://localhost:5173','https://pos-system-frontend-three.vercel.app'],
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
   });
